@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Cards from "./Cards.jsx"
-import List from "../../public/List.json"
 import {Link} from 'react-router-dom'
-
+import axios from "axios"
 
 
 
 export default function Course() {
+  
+  const [book,setBook] = useState([]);
+
+  useEffect(()=>{
+    const getBook = async()=>{
+      try{
+        const  res = await axios.get("http://localhost:3000/book")
+        console.log(res.data)
+        setBook(res.data)
+      }catch(error){
+        console.log("error",error);
+      }
+    }
+    getBook();
+  },[])
+
   return (
     <>
       <div className='max-w-screen-2xl container mx-auto md:px-20 px-4'>
@@ -27,7 +42,7 @@ export default function Course() {
         {/* Add gap to the grid */}
         <div className='mt-12 grid grid-cols-1 md:grid-cols-4 gap-8'> {/* Added gap-8 */}
           {
-            List.map((item) => (
+            book.map((item) => (
               <Cards key={item.id} item={item}/>
             ))
           }
